@@ -1,8 +1,9 @@
 // Item.jsx — representa un solo elemento de la lista
-function Item() {
+function Item({ tarea }) {
     return (
-        <article>
-            <p>Soy un item individual de la lista</p>
+        <article className="item">
+            <h3>{tarea.texto}</h3>
+            <p>estado: {tarea.completada ?  'Completada' : 'Pendiente'}</p>
         </article>
     )
 }
