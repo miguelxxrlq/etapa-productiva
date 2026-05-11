@@ -1,9 +1,10 @@
 // Encabezado.jsx — título y presentación de la app
+import  '</Encabezado.css'
 function Encabezado({titulo, subtitulo}) {
     return (
-        <header>
-            <h1>{titulo}</h1>
-            <p>{subtitulo}</p>
+        <header className="encabezado">
+            <h1 className="encabezado_titulo">{titulo}</h1>
+            <p className="encabezado_subtitulo">{subtitulo}</p>
         </header>
     )
 }

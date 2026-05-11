@@ -1,0 +1,7 @@
+/* Lista.css */ 
+.lista {
+    list-style: none;
+    padding: 0 16px;
+    margin: 16px auto;
+    max-width: 600px;
+}
