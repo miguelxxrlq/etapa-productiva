@@ -1,5 +1,5 @@
 // Encabezado.jsx — título y presentación de la app
-import  '</Encabezado.css'
+import  './Encabezado.css'
 function Encabezado({titulo, subtitulo}) {
     return (
         <header className="encabezado">
