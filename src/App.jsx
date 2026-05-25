@@ -2,6 +2,7 @@ import { useState } from 'react'
 import Encabezado from './componentes/Encabezado'
 import Formulario from './componentes/Formulario'
 import Lista from './componentes/Lista'
+import Filtros from './componentes/Filtros'
 import PiePagina from './componentes/PiePagina'
 import './App.css'
 
@@ -9,9 +10,7 @@ import './App.css'
 function cargarTareasIniciales() {
   try {
     const guardado = localStorage.getItem('tareas')
-
     if (guardado === null) return []
-
     return JSON.parse(guardado)
   } catch (error) {
     console.error('Error al cargar tareas:', error)
@@ -22,10 +21,13 @@ function cargarTareasIniciales() {
 function App() {
   const [mostrarFormulario, setMostrarFormulario] = useState(false)
 
-  // 📦 Estado inicial desde localStorage
   const [tareas, setTareas] = useState(cargarTareasIniciales)
 
-  // 💾 Guardar siempre en estado + localStorage
+  // 🔎 Estados de filtros
+  const [busqueda, setBusqueda] = useState("")
+  const [filtro, setFiltro] = useState("todas") // todas | pendientes | completadas
+
+  // 💾 Guardar en estado + localStorage
   const guardarTareas = (nuevasTareas) => {
     setTareas(nuevasTareas)
     localStorage.setItem('tareas', JSON.stringify(nuevasTareas))
@@ -60,6 +62,17 @@ function App() {
     )
   }
 
+  // 🔍 FILTRO + BÚSQUEDA
+  const tareasFiltradas = tareas
+    .filter(tarea => {
+      if (filtro === "pendientes") return !tarea.completada
+      if (filtro === "completadas") return tarea.completada
+      return true
+    })
+    .filter(tarea =>
+      tarea.texto.toLowerCase().includes(busqueda.toLowerCase())
+    )
+
   return (
     <div className="app">
       <Encabezado
@@ -78,12 +91,22 @@ function App() {
           : 'Agregar tarea'}
       </button>
 
+      {/* ➕ FORMULARIO */}
       {mostrarFormulario && (
         <Formulario alAgregar={agregarTarea} />
       )}
 
+      {/* 🔎 FILTROS */}
+      <Filtros
+        busqueda={busqueda}
+        alCambiarBusqueda={setBusqueda}
+        filtro={filtro}
+        alCambiarFiltro={setFiltro}
+      />
+
+      {/* 📋 LISTA FILTRADA */}
       <Lista
-        tareas={tareas}
+        tareas={tareasFiltradas}  // 👈 IMPORTANTE
         alEliminar={eliminarTarea}
         alAlternar={alternarCompletada}
       />
