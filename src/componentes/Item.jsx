@@ -1,30 +1,28 @@
-// Item.jsx — representa un solo elemento de la lista
-import { useState } from "react"
-import './Item.css' 
-function Item({ tarea }) {
-    const [resaltado, setResaltado] = useState(false) 
-    const manejarCompletar = (evento) => { 
-         evento.stopPropagation() 
-         alert(`Marcar como completada: ${tarea.texto}`) 
-         }
-        const manejarEliminar = (evento) => { 
-        evento.stopPropagation()  
-        alert(`Eliminar: ${tarea.texto}`)   } 
-    return (
-        <article
-         className= {resaltado ? 'item item--resaltado' : 'item'}
-         onClick={()  => setResaltado(!resaltado) } 
-         >
-      <div className="item__contenido"> 
-            <h3 className="item_texto">{tarea.texto}</h3>
-            <p className="item_estado">
-             {tarea.completada ?  'Completada' : 'Pendiente'}</p>
-      </div> 
-       <div className="item__acciones">   
-              <button onClick={manejarCompletar}>✓</button>     
-           <button onClick={manejarEliminar}>✕</button>   
-           </div> 
-        </article>
-    )
+import './Item.css'
+
+function Item({ tarea, alEliminar }) {
+  return (
+    <article className="item">
+      <div className="item__contenido">
+        <h3 className="item__texto">
+          {tarea.texto}
+        </h3>
+
+        <p className="item__estado">
+          {tarea.completada ? 'Completada' : 'Pendiente'}
+        </p>
+      </div>
+
+      <div className="item__acciones">
+        <button
+          className="boton-eliminar"
+          onClick={() => alEliminar(tarea.id)}
+        >
+          ✕
+        </button>
+      </div>
+    </article>
+  )
 }
-export default Item 
+
+export default Item

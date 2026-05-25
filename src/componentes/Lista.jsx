@@ -1,14 +1,18 @@
-import Item from "./Item"
+import Item from './Item'
+import './Lista.css'
 
-// Lista.jsx — mostrará todos los items 
-function Lista({ tareas}) {
-    return (
-        <ul className="lista">
-            {tareas.map(tarea => (
-                 <Item key={tarea.id} tarea={tarea}  /> 
-            ))}
-        </ul>
-       
-    )
+function Lista({ tareas, alEliminar }) {
+  return (
+    <ul className="lista">
+      {tareas.map(tarea => (
+        <Item
+          key={tarea.id}
+          tarea={tarea}
+          alEliminar={alEliminar}
+        />
+      ))}
+    </ul>
+  )
 }
-export default Lista    
+
+export default Lista 

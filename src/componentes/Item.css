@@ -47,3 +47,20 @@
 .item__acciones button:hover { 
       opacity: 0.85; 
     } 
+/* Item.css — agregar al final */
+
+.boton-eliminar {
+  background-color: #c0392b;
+  color: white;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.boton-eliminar:hover {
+  background-color: #a93226;
+}
