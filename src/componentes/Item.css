@@ -1,5 +1,7 @@
 /* Item.css */ 
 .item {
+    cursor: pointer;
+      transition: background-color 0.2s; 
     display: flex;
      justify-content: space-between;
      align-items: center;
@@ -9,6 +11,7 @@
      border: 1px solid #ddd;
      border-radius: 8px;
      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05)
+    
 }
 .item_texto {
     font-size: 16px;
@@ -19,3 +22,28 @@
     color: #666;
     margin: 0;
 }
+.item--resaltado{
+     background-color: #fff3cd; 
+      border-color: #ffc107; 
+}
+.item.css {
+    display: flex; 
+    justify-content: space-between;
+   align-items: center; 
+}
+.item__acciones {  
+    display:  flex;
+    gap: 8px;
+ } 
+ .item__acciones button {   
+    padding: 6px 12px;   
+    border: none;   
+    border-radius: 4px;   
+    cursor: pointer;   
+    font-size: 14px;   
+    background-color: #1F3864;
+       color: white;
+    } 
+.item__acciones button:hover { 
+      opacity: 0.85; 
+    } 
