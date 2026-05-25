@@ -5,23 +5,27 @@ import Lista from './componentes/Lista'
 import PiePagina from './componentes/PiePagina'
 import './App.css'
 
-// 👉 Cargar datos iniciales desde localStorage
-const tareasGuardadas = JSON.parse(localStorage.getItem('tareas')) || []
+// 🧠 Carga segura desde localStorage
+function cargarTareasIniciales() {
+  try {
+    const guardado = localStorage.getItem('tareas')
+
+    if (guardado === null) return []
+
+    return JSON.parse(guardado)
+  } catch (error) {
+    console.error('Error al cargar tareas:', error)
+    return []
+  }
+}
 
 function App() {
   const [mostrarFormulario, setMostrarFormulario] = useState(false)
 
-  const [tareas, setTareas] = useState(
-    tareasGuardadas.length > 0
-      ? tareasGuardadas
-      : [
-          { id: 1, texto: "Estudiar React", completada: false },
-          { id: 2, texto: "Hacer ejercicio", completada: true },
-          { id: 3, texto: "Leer 10 páginas", completada: false }
-        ]
-  )
+  // 📦 Estado inicial desde localStorage
+  const [tareas, setTareas] = useState(cargarTareasIniciales)
 
-  // 💾 función auxiliar
+  // 💾 Guardar siempre en estado + localStorage
   const guardarTareas = (nuevasTareas) => {
     setTareas(nuevasTareas)
     localStorage.setItem('tareas', JSON.stringify(nuevasTareas))
