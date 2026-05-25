@@ -4,9 +4,7 @@ function Item({ tarea, alEliminar, alAlternar }) {
   return (
     <article className={`item ${tarea.completada ? 'item--completada' : ''}`}>
       <div className="item__contenido">
-        <h3 className="item__texto">
-          {tarea.texto}
-        </h3>
+        <h3 className="item__texto">{tarea.texto}</h3>
 
         <p className="item__estado">
           {tarea.completada ? 'Completada' : 'Pendiente'}
@@ -14,8 +12,6 @@ function Item({ tarea, alEliminar, alAlternar }) {
       </div>
 
       <div className="item__acciones">
-
-        {/* Botón completar */}
         <button
           className="boton-completar"
           onClick={() => alAlternar(tarea.id)}
@@ -23,14 +19,12 @@ function Item({ tarea, alEliminar, alAlternar }) {
           {tarea.completada ? '↺' : '✓'}
         </button>
 
-        {/* Botón eliminar */}
         <button
           className="boton-eliminar"
           onClick={() => alEliminar(tarea.id)}
         >
           ✕
         </button>
-
       </div>
     </article>
   )

@@ -6,97 +6,109 @@ import Filtros from './componentes/Filtros'
 import PiePagina from './componentes/PiePagina'
 import './App.css'
 
-// 🧠 Carga segura desde localStorage
+// 🧠 cargar localStorage
 function cargarTareasIniciales() {
   try {
-    const guardado = localStorage.getItem('tareas')
-    if (guardado === null) return []
-    return JSON.parse(guardado)
-  } catch (error) {
-    console.error('Error al cargar tareas:', error)
+    const datos = localStorage.getItem('tareas')
+    if (!datos) return []
+    return JSON.parse(datos)
+  } catch {
     return []
   }
 }
 
 function App() {
   const [mostrarFormulario, setMostrarFormulario] = useState(false)
-
   const [tareas, setTareas] = useState(cargarTareasIniciales)
 
-  // 🔎 Estados de filtros
   const [busqueda, setBusqueda] = useState("")
-  const [filtro, setFiltro] = useState("todas") // todas | pendientes | completadas
+  const [filtro, setFiltro] = useState("todas")
+  const [darkMode, setDarkMode] = useState(false)
 
-  // 💾 Guardar en estado + localStorage
-  const guardarTareas = (nuevasTareas) => {
-    setTareas(nuevasTareas)
-    localStorage.setItem('tareas', JSON.stringify(nuevasTareas))
+  // 💾 persistencia segura
+  const guardarTareas = (actualizar) => {
+    setTareas(prev => {
+      const nuevas =
+        typeof actualizar === "function"
+          ? actualizar(prev)
+          : actualizar
+
+      localStorage.setItem('tareas', JSON.stringify(nuevas))
+      return nuevas
+    })
   }
 
-  // ➕ CREATE
-  const agregarTarea = (textoNuevo) => {
-    const tareaNueva = {
+  // ➕ agregar
+  const agregarTarea = (texto) => {
+    if (!texto.trim()) return
+
+    const nueva = {
       id: Date.now(),
-      texto: textoNuevo,
+      texto,
       completada: false
     }
 
-    guardarTareas([...tareas, tareaNueva])
+    guardarTareas(prev => [...prev, nueva])
   }
 
-  // ❌ DELETE
-  const eliminarTarea = (idAEliminar) => {
-    guardarTareas(
-      tareas.filter(tarea => tarea.id !== idAEliminar)
-    )
+  // ❌ eliminar
+  const eliminarTarea = (id) => {
+    guardarTareas(prev => prev.filter(t => t.id !== id))
   }
 
-  // 🔁 UPDATE
-  const alternarCompletada = (idAAlternar) => {
-    guardarTareas(
-      tareas.map(tarea =>
-        tarea.id === idAAlternar
-          ? { ...tarea, completada: !tarea.completada }
-          : tarea
+  // 🔁 alternar
+  const alternarCompletada = (id) => {
+    guardarTareas(prev =>
+      prev.map(t =>
+        t.id === id
+          ? { ...t, completada: !t.completada }
+          : t
       )
     )
   }
 
-  // 🔍 FILTRO + BÚSQUEDA
+  // 🔍 filtros
   const tareasFiltradas = tareas
-    .filter(tarea => {
-      if (filtro === "pendientes") return !tarea.completada
-      if (filtro === "completadas") return tarea.completada
+    .filter(t => {
+      if (filtro === "pendientes") return !t.completada
+      if (filtro === "completadas") return t.completada
       return true
     })
-    .filter(tarea =>
-      tarea.texto.toLowerCase().includes(busqueda.toLowerCase())
+    .filter(t =>
+      t.texto.toLowerCase().includes(busqueda.toLowerCase())
     )
 
   return (
-    <div className="app">
+    <div className={`app ${darkMode ? "dark" : ""}`}>
+
       <Encabezado
         titulo="Mis tareas"
         subtitulo="Organiza tu día"
       />
 
-      <button
-        onClick={() =>
-          setMostrarFormulario(!mostrarFormulario)
-        }
-        className="button-toggle"
-      >
-        {mostrarFormulario
-          ? 'Ocultar formulario'
-          : 'Agregar tarea'}
-      </button>
+      {/* BOTONES SUPERIORES */}
+      <div style={{ display: "flex", gap: "10px", justifyContent: "center" }}>
+        <button
+          className="button-toggle"
+          onClick={() => setMostrarFormulario(!mostrarFormulario)}
+        >
+          {mostrarFormulario ? "Ocultar formulario" : "Agregar tarea"}
+        </button>
 
-      {/* ➕ FORMULARIO */}
+        <button
+          className="button-toggle"
+          onClick={() => setDarkMode(!darkMode)}
+        >
+          {darkMode ? "☀️ Claro" : "🌙 Oscuro"}
+        </button>
+      </div>
+
+      {/* FORMULARIO */}
       {mostrarFormulario && (
         <Formulario alAgregar={agregarTarea} />
       )}
 
-      {/* 🔎 FILTROS */}
+      {/* FILTROS */}
       <Filtros
         busqueda={busqueda}
         alCambiarBusqueda={setBusqueda}
@@ -104,9 +116,9 @@ function App() {
         alCambiarFiltro={setFiltro}
       />
 
-      {/* 📋 LISTA FILTRADA */}
+      {/* LISTA */}
       <Lista
-        tareas={tareasFiltradas}  // 👈 IMPORTANTE
+        tareas={tareasFiltradas}
         alEliminar={eliminarTarea}
         alAlternar={alternarCompletada}
       />

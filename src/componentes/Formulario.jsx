@@ -4,18 +4,12 @@ import './Formulario.css'
 function Formulario({ alAgregar }) {
   const [nuevaTarea, setNuevaTarea] = useState("")
 
-  const manejarEnvio = (evento) => {
-    evento.preventDefault()
+  const manejarEnvio = (e) => {
+    e.preventDefault()
 
-    if (nuevaTarea.trim() === "") {
-      alert("Por favor escribe algo")
-      return
-    }
+    if (nuevaTarea.trim() === "") return
 
-    // Llamar a la función que vino del padre
     alAgregar(nuevaTarea)
-
-    // Limpiar el input
     setNuevaTarea("")
   }
 
@@ -24,20 +18,16 @@ function Formulario({ alAgregar }) {
       <h2>Agregar nueva tarea</h2>
 
       <input
-        type="text"
         value={nuevaTarea}
         onChange={(e) => setNuevaTarea(e.target.value)}
         placeholder="Escribe algo..."
       />
 
-      <button type="submit">
-        Agregar
-      </button>
+      <button type="submit">Agregar</button>
     </form>
   )
 }
 
 export default Formulario
-
 
 
