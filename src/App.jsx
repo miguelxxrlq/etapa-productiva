@@ -5,15 +5,29 @@ import Lista from './componentes/Lista'
 import PiePagina from './componentes/PiePagina'
 import './App.css'
 
+// 👉 Cargar datos iniciales desde localStorage
+const tareasGuardadas = JSON.parse(localStorage.getItem('tareas')) || []
+
 function App() {
   const [mostrarFormulario, setMostrarFormulario] = useState(false)
 
-  const [tareas, setTareas] = useState([
-    { id: 1, texto: "Estudiar React", completada: false },
-    { id: 2, texto: "Hacer ejercicio", completada: true },
-    { id: 3, texto: "Leer 10 páginas", completada: false }
-  ])
+  const [tareas, setTareas] = useState(
+    tareasGuardadas.length > 0
+      ? tareasGuardadas
+      : [
+          { id: 1, texto: "Estudiar React", completada: false },
+          { id: 2, texto: "Hacer ejercicio", completada: true },
+          { id: 3, texto: "Leer 10 páginas", completada: false }
+        ]
+  )
 
+  // 💾 función auxiliar
+  const guardarTareas = (nuevasTareas) => {
+    setTareas(nuevasTareas)
+    localStorage.setItem('tareas', JSON.stringify(nuevasTareas))
+  }
+
+  // ➕ CREATE
   const agregarTarea = (textoNuevo) => {
     const tareaNueva = {
       id: Date.now(),
@@ -21,13 +35,23 @@ function App() {
       completada: false
     }
 
-    setTareas([...tareas, tareaNueva])
+    guardarTareas([...tareas, tareaNueva])
   }
 
+  // ❌ DELETE
   const eliminarTarea = (idAEliminar) => {
-    setTareas(
-      tareas.filter(
-        tarea => tarea.id !== idAEliminar
+    guardarTareas(
+      tareas.filter(tarea => tarea.id !== idAEliminar)
+    )
+  }
+
+  // 🔁 UPDATE
+  const alternarCompletada = (idAAlternar) => {
+    guardarTareas(
+      tareas.map(tarea =>
+        tarea.id === idAAlternar
+          ? { ...tarea, completada: !tarea.completada }
+          : tarea
       )
     )
   }
@@ -57,6 +81,7 @@ function App() {
       <Lista
         tareas={tareas}
         alEliminar={eliminarTarea}
+        alAlternar={alternarCompletada}
       />
 
       <PiePagina />

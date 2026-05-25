@@ -1,8 +1,8 @@
 import './Item.css'
 
-function Item({ tarea, alEliminar }) {
+function Item({ tarea, alEliminar, alAlternar }) {
   return (
-    <article className="item">
+    <article className={`item ${tarea.completada ? 'item--completada' : ''}`}>
       <div className="item__contenido">
         <h3 className="item__texto">
           {tarea.texto}
@@ -14,12 +14,23 @@ function Item({ tarea, alEliminar }) {
       </div>
 
       <div className="item__acciones">
+
+        {/* Botón completar */}
+        <button
+          className="boton-completar"
+          onClick={() => alAlternar(tarea.id)}
+        >
+          {tarea.completada ? '↺' : '✓'}
+        </button>
+
+        {/* Botón eliminar */}
         <button
           className="boton-eliminar"
           onClick={() => alEliminar(tarea.id)}
         >
           ✕
         </button>
+
       </div>
     </article>
   )

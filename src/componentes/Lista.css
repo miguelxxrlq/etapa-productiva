@@ -5,3 +5,11 @@
     margin: 16px auto;
     max-width: 600px;
 }
+/* Lista.css — agregar al final */
+
+.lista__vacia {
+  text-align: center;
+  color: #888;
+  padding: 40px 20px;
+  font-style: italic;
+}
